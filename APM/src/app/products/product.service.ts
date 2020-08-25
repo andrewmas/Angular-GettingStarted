@@ -9,6 +9,7 @@ export class ProductService {
 
     getProducts(): IProduct[] {
         return [
+            //these collection need to come from database
             {
                 "productId": 2,
                 "productName": "Garden Cart",

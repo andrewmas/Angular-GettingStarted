@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {IProduct} from './product';
+import {ProductService} from './product.service';
 
 @Component({
     selector: 'pm-products',
     templateUrl: './product-list.component.html',
-    styleUrls:['./product-list.component.css']
+    styleUrls:['./product-list.component.css'],
+    // providers: [ProductService] //this is registering the service for one specific component. providedIn: 'root' is for entire module
 })
 
 export class ProductListComponent implements OnInit {
@@ -13,7 +15,7 @@ export class ProductListComponent implements OnInit {
     imageMargin: number = 2;
     showImage: boolean = false;
     showImageText: string = 'Show';
-    
+        
     _listFilter: string;
     get listFilter(): string {
         return this._listFilter;
@@ -25,42 +27,11 @@ export class ProductListComponent implements OnInit {
     }
 
     filteredProducts: IProduct[];
-    products: IProduct[] = [
-        {
-            "productId": 2,
-            "productName": "Garden Cart",
-            "productCode": "GDN-0023",
-            "releaseDate": "March 18, 2019",
-            "description": "15 gallon capacity rolling garden hose",
-            "price": 32.99,
-            "starRating": 4.2,
-            "imageUrl": "assets/images/garden_cart.png"
-        },
-        {
-            "productId": 5,
-            "productName": "Hammer",
-            "productCode": "TBX-0048",
-            "releaseDate": "May 21, 2019",
-            "description": "Curved claw steel hammer",
-            "price": 8.9,
-            "starRating": 4.8,
-            "imageUrl": "assets/images/hammer.png",
-        },
-        {
-            "productId": 6,
-            "productName": "Iron Man",
-            "productCode": "IRM-0050",
-            "releaseDate": "May 21, 2020",
-            "description": "And I...am Iron man",
-            "price": 10.0,
-            "starRating": 5.0,
-            "imageUrl": "assets/images/hammer.png",
-        }
-    ];
+    products: IProduct[] = [];
 
-    constructor() {
-        this.filteredProducts = this.products;
-        this.listFilter = 'cart';
+    constructor(private productService: ProductService) {
+        // this.filteredProducts = this.products; //since constructor gets executed first before ngOnInit so we need to move this down
+        // this.listFilter = 'cart'; //remove this to see all products by default
     }
 
     performFilter(filterBy: string) : IProduct[] {
@@ -76,7 +47,11 @@ export class ProductListComponent implements OnInit {
     }
 
     ngOnInit(): void{
+        //lifecycle hook
+        //constructor gets executed first before ngOnInit
         console.log('In OnInit');
+        this.products = this.productService.getProducts();
+        this.filteredProducts = this.products;
     }
 
     onRatingClicked(message: string): void {
