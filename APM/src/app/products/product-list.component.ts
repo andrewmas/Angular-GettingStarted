@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit {
     }
 
     filteredProducts: IProduct[];
-    products: IProduct[] = [];
+    products: IProduct[] = []; //product collection is no longer hardcoded here. But instead they got moved to product.service
 
     constructor(private productService: ProductService) {
         // this.filteredProducts = this.products; //since constructor gets executed first before ngOnInit so we need to move this down
